@@ -1,0 +1,134 @@
+---
+jobs:
+- name: logsearch-s3archiving-check-b.cld.gov.au
+  serial: true
+  plan:
+  - do:
+    - get: 5m
+      trigger: true
+    - task: check-bucket
+      params:
+        BUCKET_NAME: {{b-cld-bucket-name}}
+        AWS_ACCESS_KEY_ID: {{aws-access-key-id}}
+        AWS_SECRET_ACCESS_KEY: {{aws-secret-access-key}}
+        AWS_DEFAULT_REGION: {{aws-default-region}}
+      config:
+        platform: linux
+        image_resource:
+          type: docker-image
+          source:
+            repository: govau/cga-cf-bosh-cli
+        run:
+          path: sh
+          args:
+          - -exc
+          - aws s3api list-objects --bucket $BUCKET_NAME --prefix $(date -u --date="-20 minutes" +%Y/%m/%d/%H/%M) | grep Size
+    # on_failure:
+    #   put: slack
+    #   params:
+    #     text: |
+    #       :x: $BUILD_JOB_NAME FAILED
+    #       <$ATC_EXTERNAL_URL/teams/$BUILD_TEAM_NAME/pipelines/$BUILD_PIPELINE_NAME/jobs/$BUILD_JOB_NAME/builds/$BUILD_NAME|View build details>
+- name: logsearch-s3archiving-check-d.cld.gov.au
+  serial: true
+  plan:
+  - do:
+    - get: 5m
+      trigger: true
+    - task: check-bucket
+      params:
+        BUCKET_NAME: {{d-cld-bucket-name}}
+        AWS_ACCESS_KEY_ID: {{aws-access-key-id}}
+        AWS_SECRET_ACCESS_KEY: {{aws-secret-access-key}}
+        AWS_DEFAULT_REGION: {{aws-default-region}}
+      config:
+        platform: linux
+        image_resource:
+          type: docker-image
+          source:
+            repository: govau/cga-cf-bosh-cli
+        run:
+          path: sh
+          args:
+          - -exc
+          - aws s3api list-objects --bucket $BUCKET_NAME --prefix $(date -u --date="-20 minutes" +%Y/%m/%d/%H/%M) | grep Size
+    # on_failure:
+    #   put: slack
+    #   params:
+    #     text: |
+    #       :x: $BUILD_JOB_NAME FAILED
+    #       <$ATC_EXTERNAL_URL/teams/$BUILD_TEAM_NAME/pipelines/$BUILD_PIPELINE_NAME/jobs/$BUILD_JOB_NAME/builds/$BUILD_NAME|View build details>
+- name: logsearch-s3archiving-check-o.cld.gov.au
+  serial: true
+  plan:
+  - do:
+    - get: 5m
+      trigger: true
+    - task: check-bucket
+      params:
+        BUCKET_NAME: {{o-cld-bucket-name}}
+        AWS_ACCESS_KEY_ID: {{aws-access-key-id}}
+        AWS_SECRET_ACCESS_KEY: {{aws-secret-access-key}}
+        AWS_DEFAULT_REGION: {{aws-default-region}}
+      config:
+        platform: linux
+        image_resource:
+          type: docker-image
+          source:
+            repository: govau/cga-cf-bosh-cli
+        run:
+          path: sh
+          args:
+          - -exc
+          - aws s3api list-objects --bucket $BUCKET_NAME --prefix $(date -u --date="-20 minutes" +%Y/%m/%d/%H/%M) | grep Size
+    on_failure:
+      put: slack
+      params:
+        text: |
+          :x: $BUILD_JOB_NAME FAILED
+          <$ATC_EXTERNAL_URL/teams/$BUILD_TEAM_NAME/pipelines/$BUILD_PIPELINE_NAME/jobs/$BUILD_JOB_NAME/builds/$BUILD_NAME|View build details>
+- name: logsearch-s3archiving-check-y.cld.gov.au
+  serial: true
+  plan:
+  - do:
+    - get: 5m
+      trigger: true
+    - task: check-bucket
+      params:
+        BUCKET_NAME: {{y-cld-bucket-name}}
+        AWS_ACCESS_KEY_ID: {{aws-access-key-id}}
+        AWS_SECRET_ACCESS_KEY: {{aws-secret-access-key}}
+        AWS_DEFAULT_REGION: {{aws-default-region}}
+      config:
+        platform: linux
+        image_resource:
+          type: docker-image
+          source:
+            repository: govau/cga-cf-bosh-cli
+        run:
+          path: sh
+          args:
+          - -exc
+          - aws s3api list-objects --bucket $BUCKET_NAME --prefix $(date -u --date="-20 minutes" +%Y/%m/%d/%H/%M) | grep Size
+    # on_failure:
+    #   put: slack
+    #   params:
+    #     text: |
+    #       :x: $BUILD_JOB_NAME FAILED
+    #       <$ATC_EXTERNAL_URL/teams/$BUILD_TEAM_NAME/pipelines/$BUILD_PIPELINE_NAME/jobs/$BUILD_JOB_NAME/builds/$BUILD_NAME|View build details>
+
+resources:
+- name: 5m
+  type: time
+  source: {interval: 5m}
+
+- name: slack
+  type: slack-notification
+  source:
+    url: {{concourse-slack-webhook-url}}
+
+resource_types:
+- name: slack-notification
+  type: docker-image
+  source:
+    repository: cfcommunity/slack-notification-resource
