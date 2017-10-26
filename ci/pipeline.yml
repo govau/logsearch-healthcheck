@@ -7,7 +7,7 @@ resources:
 - name: logsearch-healthcheck.git
   type: git
   source:
-    branch: initial-pipeline
+    branch: master
     uri: https://github.com/govau/logsearch-healthcheck.git
 - name: slack
   type: slack-notification
