@@ -1,0 +1,9 @@
+platform: linux
+image_resource:
+  type: docker-image
+  source: {repository: govau/cga-cf-bosh-cli}
+inputs:
+- name: logsearch-healthcheck.git
+run:
+  path: ./logsearch-healthcheck.git/ci/scripts/check-buckets.sh
+outputs: []
