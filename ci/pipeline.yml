@@ -1,0 +1,83 @@
+groups: []
+resources:
+- name: 5m
+  type: time
+  source:
+    interval: 5m
+- name: logsearch-healthcheck.git
+  type: git
+  source:
+    branch: master
+    uri: https://github.com/govau/logsearch-healthcheck.git
+- name: slack
+  type: slack-notification
+  source:
+    url: {{concourse-slack-webhook-url}}
+resource_types:
+- name: slack-notification
+  type: docker-image
+  source:
+    repository: cfcommunity/slack-notification-resource
+jobs:
+- name: logsearch-s3archiving-check-b.cld.gov.au
+  serial: true
+  plan:
+  - do:
+    - get: 5m
+      trigger: true
+    - get: logsearch-healthcheck.git
+    - task: check-bucket
+      file: logsearch-healthcheck.git/ci/tasks/check-bucket.yml
+      params:
+        AWS_ACCESS_KEY_ID: {{aws-access-key-id}}
+        AWS_DEFAULT_REGION: {{aws-default-region}}
+        AWS_SECRET_ACCESS_KEY: {{aws-secret-access-key}}
+        BUCKET_NAME: {{b-cld-bucket-name}}
+- name: logsearch-s3archiving-check-d.cld.gov.au
+  serial: true
+  plan:
+  - do:
+    - get: 5m
+      trigger: true
+    - get: logsearch-healthcheck.git
+    - task: check-bucket
+      file: logsearch-healthcheck.git/ci/tasks/check-bucket.yml
+      params:
+        AWS_ACCESS_KEY_ID: {{aws-access-key-id}}
+        AWS_DEFAULT_REGION: {{aws-default-region}}
+        AWS_SECRET_ACCESS_KEY: {{aws-secret-access-key}}
+        BUCKET_NAME: {{d-cld-bucket-name}}
+- name: logsearch-s3archiving-check-o.cld.gov.au
+  serial: true
+  plan:
+  - do:
+    - get: 5m
+      trigger: true
+    - get: logsearch-healthcheck.git
+    - task: check-bucket
+      file: logsearch-healthcheck.git/ci/tasks/check-bucket.yml
+      params:
+        AWS_ACCESS_KEY_ID: {{aws-access-key-id}}
+        AWS_DEFAULT_REGION: {{aws-default-region}}
+        AWS_SECRET_ACCESS_KEY: {{aws-secret-access-key}}
+        BUCKET_NAME: {{o-cld-bucket-name}}
+    on_failure:
+      put: slack
+      params:
+        text: |
+          :x: $BUILD_JOB_NAME FAILED
+          <$ATC_EXTERNAL_URL/teams/$BUILD_TEAM_NAME/pipelines/$BUILD_PIPELINE_NAME/jobs/$BUILD_JOB_NAME/builds/$BUILD_NAME|View build details>
+- name: logsearch-s3archiving-check-y.cld.gov.au
+  serial: true
+  plan:
+  - do:
+    - get: 5m
+      trigger: true
+    - get: logsearch-healthcheck.git
+    - task: check-bucket
+      file: logsearch-healthcheck.git/ci/tasks/check-bucket.yml
+      params:
+        AWS_ACCESS_KEY_ID: {{aws-access-key-id}}
+        AWS_DEFAULT_REGION: {{aws-default-region}}
+        AWS_SECRET_ACCESS_KEY: {{aws-secret-access-key}}
+        BUCKET_NAME: {{y-cld-bucket-name}}
