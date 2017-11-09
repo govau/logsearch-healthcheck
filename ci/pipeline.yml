@@ -33,6 +33,13 @@ jobs:
         AWS_DEFAULT_REGION: {{aws-default-region}}
         AWS_SECRET_ACCESS_KEY: {{aws-secret-access-key}}
         BUCKET_NAME: {{b-cld-bucket-name}}
+    on_failure:
+      put: slack
+      params:
+        text: |
+          :x: $BUILD_JOB_NAME FAILED
+          <$ATC_EXTERNAL_URL/teams/$BUILD_TEAM_NAME/pipelines/$BUILD_PIPELINE_NAME/jobs/$BUILD_JOB_NAME/builds/$BUILD_NAME|View build details>
+
 - name: logsearch-s3archiving-check-d.cld.gov.au
   serial: true
   plan:
@@ -47,6 +54,13 @@ jobs:
         AWS_DEFAULT_REGION: {{aws-default-region}}
         AWS_SECRET_ACCESS_KEY: {{aws-secret-access-key}}
         BUCKET_NAME: {{d-cld-bucket-name}}
+    on_failure:
+      put: slack
+      params:
+        text: |
+          :x: $BUILD_JOB_NAME FAILED
+          <$ATC_EXTERNAL_URL/teams/$BUILD_TEAM_NAME/pipelines/$BUILD_PIPELINE_NAME/jobs/$BUILD_JOB_NAME/builds/$BUILD_NAME|View build details>
+
 - name: logsearch-s3archiving-check-o.cld.gov.au
   serial: true
   plan:
@@ -81,3 +95,9 @@ jobs:
         AWS_DEFAULT_REGION: {{aws-default-region}}
         AWS_SECRET_ACCESS_KEY: {{aws-secret-access-key}}
         BUCKET_NAME: {{y-cld-bucket-name}}
+    on_failure:
+      put: slack
+      params:
+        text: |
+          :x: $BUILD_JOB_NAME FAILED
+          <$ATC_EXTERNAL_URL/teams/$BUILD_TEAM_NAME/pipelines/$BUILD_PIPELINE_NAME/jobs/$BUILD_JOB_NAME/builds/$BUILD_NAME|View build details>
