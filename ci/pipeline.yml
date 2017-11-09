@@ -39,7 +39,6 @@ jobs:
         text: |
           :x: $BUILD_JOB_NAME FAILED
           <$ATC_EXTERNAL_URL/teams/$BUILD_TEAM_NAME/pipelines/$BUILD_PIPELINE_NAME/jobs/$BUILD_JOB_NAME/builds/$BUILD_NAME|View build details>
-
 - name: logsearch-s3archiving-check-d.cld.gov.au
   serial: true
   plan:
@@ -60,7 +59,6 @@ jobs:
         text: |
           :x: $BUILD_JOB_NAME FAILED
           <$ATC_EXTERNAL_URL/teams/$BUILD_TEAM_NAME/pipelines/$BUILD_PIPELINE_NAME/jobs/$BUILD_JOB_NAME/builds/$BUILD_NAME|View build details>
-
 - name: logsearch-s3archiving-check-o.cld.gov.au
   serial: true
   plan:
