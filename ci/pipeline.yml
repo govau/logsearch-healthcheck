@@ -59,26 +59,6 @@ jobs:
         text: |
           :x: $BUILD_JOB_NAME FAILED
           <$ATC_EXTERNAL_URL/teams/$BUILD_TEAM_NAME/pipelines/$BUILD_PIPELINE_NAME/jobs/$BUILD_JOB_NAME/builds/$BUILD_NAME|View build details>
-- name: logsearch-s3archiving-check-o.cld.gov.au
-  serial: true
-  plan:
-  - do:
-    - get: 5m
-      trigger: true
-    - get: logsearch-healthcheck.git
-    - task: check-bucket
-      file: logsearch-healthcheck.git/ci/tasks/check-bucket.yml
-      params:
-        AWS_ACCESS_KEY_ID: {{aws-access-key-id}}
-        AWS_DEFAULT_REGION: {{aws-default-region}}
-        AWS_SECRET_ACCESS_KEY: {{aws-secret-access-key}}
-        BUCKET_NAME: {{o-cld-bucket-name}}
-    on_failure:
-      put: slack
-      params:
-        text: |
-          :x: $BUILD_JOB_NAME FAILED
-          <$ATC_EXTERNAL_URL/teams/$BUILD_TEAM_NAME/pipelines/$BUILD_PIPELINE_NAME/jobs/$BUILD_JOB_NAME/builds/$BUILD_NAME|View build details>
 - name: logsearch-s3archiving-check-y.cld.gov.au
   serial: true
   plan:
