@@ -20,6 +20,7 @@ resource_types:
     repository: cfcommunity/slack-notification-resource
 jobs:
 - name: logsearch-s3archiving-check-b.cld.gov.au
+  build_logs_to_retain: 20160 # 14 days
   serial: true
   plan:
   - do:
@@ -40,6 +41,7 @@ jobs:
           :x: $BUILD_JOB_NAME FAILED
           <$ATC_EXTERNAL_URL/teams/$BUILD_TEAM_NAME/pipelines/$BUILD_PIPELINE_NAME/jobs/$BUILD_JOB_NAME/builds/$BUILD_NAME|View build details>
 - name: logsearch-s3archiving-check-d.cld.gov.au
+  build_logs_to_retain: 20160 # 14 days
   serial: true
   plan:
   - do:
@@ -60,6 +62,7 @@ jobs:
           :x: $BUILD_JOB_NAME FAILED
           <$ATC_EXTERNAL_URL/teams/$BUILD_TEAM_NAME/pipelines/$BUILD_PIPELINE_NAME/jobs/$BUILD_JOB_NAME/builds/$BUILD_NAME|View build details>
 - name: logsearch-s3archiving-check-y.cld.gov.au
+  build_logs_to_retain: 20160 # 14 days
   serial: true
   plan:
   - do:
