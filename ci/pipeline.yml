@@ -21,7 +21,7 @@ resource_types:
 jobs:
 - name: logsearch-s3archiving-check-b.cld.gov.au
   serial: true
-  build_logs_to_retain: 20160
+  build_logs_to_retain: 4032
   plan:
   - do:
     - get: 5m
@@ -42,7 +42,7 @@ jobs:
           <$ATC_EXTERNAL_URL/teams/$BUILD_TEAM_NAME/pipelines/$BUILD_PIPELINE_NAME/jobs/$BUILD_JOB_NAME/builds/$BUILD_NAME|View build details>
 - name: logsearch-s3archiving-check-d.cld.gov.au
   serial: true
-  build_logs_to_retain: 20160
+  build_logs_to_retain: 4032
   plan:
   - do:
     - get: 5m
@@ -63,7 +63,7 @@ jobs:
           <$ATC_EXTERNAL_URL/teams/$BUILD_TEAM_NAME/pipelines/$BUILD_PIPELINE_NAME/jobs/$BUILD_JOB_NAME/builds/$BUILD_NAME|View build details>
 - name: logsearch-s3archiving-check-y.cld.gov.au
   serial: true
-  build_logs_to_retain: 20160
+  build_logs_to_retain: 4032
   plan:
   - do:
     - get: 5m
